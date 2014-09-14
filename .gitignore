@@ -1,103 +1,108 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Random;
-import java.lang.System;
-
-
-public class ArraySorting
+public class SortTest {
+public static void main ( String [] args)
 {
+// создаем объект
+Sort peredacha = new Sort();
+// вызываем метод ввода размера массива
+peredacha.vvod();
+// запускаем цикл, для массива 60, 600 и 6 000
+for (int i=0;i<3;i++)
+{
+peredacha.quantity=0;
+System.out.println("Сортировка с помощью рекурсии:");
+peredacha.rekursia(0, peredacha.razmer);
+System.out.println("Количество замен для быстрой сортировки - " + peredacha.quantity);
+peredacha.vyvod();
+System.out.println("Сортировка с помощью пузырькового метода:");
+peredacha.bubbleSort(peredacha.razmer);
+peredacha.vyvod();
+System.out.println("Размер массива - " + peredacha.razmer);
+peredacha.razmer=peredacha.razmer*10;
+if (i>1)
+peredacha.razmer=peredacha.razmer*10;
+}
+}
+}
 
- public static void main(String[] args) throws IOException
-    {
+public class Sort { 
+public static int razmer=100000;
+public static int[] mass = new int[razmer];
+public static int quantity = 0;
 
- System.out.println("Введите количество элементов массива");
- BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
- int count = Integer.parseInt(reader.readLine());
- int[] array = new int[count];
- Random random = new Random();
- for (int i = 0; i < count; i++)
-        {
- array[i] = random.nextInt(100);
-        }
+public static void bubbleSort (int y) {
+int[] mass = new int[y];
+// инициализация массива:
+for(int i=0; i<mass.length; i++)
+mass[i]=(int)(Math.random()*20); 
+// объявление переменной для подсчета
+int temp = 0;
+// сортировка элементов
+for (int i=0; i<mass.length; i++){
+for (int j=0; j<mass.length-1; j++){
+if(mass[j]>mass[j+1]){
+int d=mass[j];
+mass[j]=mass[j+1];
+mass[j+1]=d;
+temp++;
+}
+}
+}
+System.out.println("Количество замен для пузырьковой сортировки - " + temp);
+}
 
- System.out.println("Исходный массив:");
- System.out.println(Arrays.toString(array));
+public static void vvod ()
+{
+// класс для ввода данных с клавиатуры
+GameHelper helper = new GameHelper(); 
+String stringGuess = helper.getUserInput("Введите число"); 
+// класс Integer и метод parseInt для интерпритации stringGuess в int
+int guess = Integer.parseInt(stringGuess); 
+razmer = guess;
+// заполнение массива случайными числами
+for(int i=0; i<razmer; i++)
+mass[i] = (int)(Math.random()*20); 
+}
 
- двухместный sortTime;
+public static void rekursia (int first, int last)
+{
+// создание объекта
+Sort peredacha = new Sort();
 
- System.out.println("Результат пузырьковой сортировки:");
- sortTime = System.nanoTime();
- bubbleSort(массив);
- sortTime = System.nanoTime() - sortTime;
- System.out.println("Время сортировки: " + sortTime);
+if (first >= last)
+return;
+// задаем переменные для выполнения сортировки с помощью рекурсии
+int i = first, j = last;
+int p = (i + j) / 2;
+// цикл сравнения
+while (i < j) {
+while (( i < p ) && ( mass [i] <= mass [p] )) i++;
+while (( j > p ) && ( mass [p] <= mass [j] )) j--;
+if ( i < j ) {{
+int temp = mass[i];
+mass[i] = mass[j];
+mass[j] = temp;
+}
+if ( i == p )
+p = j;
+else if ( j == p )
+p = i;
+}
+}
+// рекурсия
+rekursia ( first, p );
+rekursia ( p+1, last ); 
+// вызываем метод и прибавляем к нему 1
+// будет служить для подсчета количества замен, выполнения этого метода
+peredacha.quantity++; 
+} 
 
- System.out.println("Результат быстрой сортировки:");
- sortTime = System.nanoTime();
- fastSort(массив);
- sortTime = System.nanoTime() - sortTime;
- System.out.println("Время сортировки: " + sortTime);
-
-
-
-
-    }
-
- public static void bubbleSort(int[] array)
-    {
- boolean earlyShutdown = true;
- while (earlyShutdown)
-        {
- earlyShutdown = false;
- for (int i = 0; i < array.length-1; i++)
-            {
- if (array[i] > array[i+1])
-                {
- swap(array, i, i+1);
- earlyShutdown = true;
-                }
-            }
-        }
-
- System.out.println(Arrays.toString(array));
-    }
-
-
- public static void fastSort(int[] array)
-    {
- int start = 0;
- int end = array.length-1;
- int mid = (начало+конец)/2;
-
- int i = start;
- int j = end;
-
- while (i < j)
-        {
- while ((i < mid) && (array[i] <= array[mid])) i++;
- while ((j > mid) && (array[j] >= array[mid])) j--;
- if (i < j)
-            {
- swap(array, i, j);
- if (i == mid)
-                {
- mid = j;
-                }
- else if (j == mid)
-                {
- mid = i;
-                }
-            }
-        }
-
- System.out.println(Arrays.toString(array));
-    }
-
- public static void swap(int[] array, int i, int j)
-    {
- int temp = array[i];
- array[i] = array[j];
- array[j] = temp;
-    }
+public static void vyvod ()
+{
+// вывод массива
+System.out.println("");
+System.out.println("После сортировки:");
+System.out.println("");
+for(int i=0; i<razmer; i++)
+System.out.println(mass[i]); 
+}
 }
